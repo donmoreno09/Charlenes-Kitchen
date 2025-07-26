@@ -19,10 +19,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Connessione MongoDB
-mongoose.connect(process.env.MONGODB_URI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-})
+mongoose.connect(process.env.MONGODB_URI)
 .then(() => {
   console.log('🍕 Connesso a MongoDB Atlas - Charlene\'s Kitchen Database');
 })
@@ -34,7 +31,7 @@ mongoose.connect(process.env.MONGODB_URI, {
 // Routes
 app.use('/api/auth', authRoutes);
 
-// Routes di test
+// Routes di test base
 app.get('/api/test', (req, res) => {
   res.json({ 
     message: 'Benvenuto da Charlene\'s Kitchen API!',
@@ -61,7 +58,7 @@ app.get('/api/protected', authenticate, (req, res) => {
 });
 
 // Gestione errori per route non trovate
-app.use((req, res, next) => {
+app.use((req, res) => {
   res.status(404).json({ 
     message: 'Route non trovata',
     path: req.originalUrl 
@@ -83,5 +80,4 @@ app.listen(PORT, () => {
   console.log(`🚀 Charlene's Kitchen Server in esecuzione sulla porta ${PORT}`);
   console.log(`📍 Environment: ${process.env.NODE_ENV}`);
   console.log(`🌐 Test API: http://localhost:${PORT}/api/test`);
-  console.log(`🔐 Auth API: http://localhost:${PORT}/api/auth`);
 });

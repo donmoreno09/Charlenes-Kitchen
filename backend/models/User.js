@@ -102,7 +102,6 @@ userSchema.methods.getPublicProfile = function() {
 };
 
 // Index per migliorare le performance
-userSchema.index({ email: 1 });
 userSchema.index({ createdAt: -1 });
 
 export default mongoose.model('User', userSchema);

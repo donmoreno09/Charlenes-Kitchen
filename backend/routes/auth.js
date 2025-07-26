@@ -16,7 +16,7 @@ const generateToken = (userId) => {
 // @access  Public
 router.post('/register', async (req, res) => {
   try {
-    const { name, email, password, phone, address } = req.body;
+    const { name, email, password, phone, address, role } = req.body;
 
     // Validazione input
     if (!name || !email || !password) {
@@ -41,7 +41,8 @@ router.post('/register', async (req, res) => {
       email: email.toLowerCase().trim(),
       password,
       phone: phone?.trim(),
-      address: address || {}
+      address: address || {},
+      role: role || 'customer' // Permetti di specificare il ruolo
     });
 
     await user.save();
