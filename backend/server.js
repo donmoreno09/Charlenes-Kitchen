@@ -1,16 +1,14 @@
+import 'dotenv/config';  // Aggiungi questa riga come PRIMA IMPORTAZIONE
 import express from 'express';
 import mongoose from 'mongoose';
 import cors from 'cors';
-import dotenv from 'dotenv';
 
 // Import routes
 import authRoutes from './routes/auth.js';
 import productsRoutes from './routes/products.js';
 import ordersRoutes from './routes/orders.js';
+import testEmailRoutes from './routes/test-email.js';
 import { authenticate } from './middleware/auth.js';
-
-// Carica le variabili d'ambiente
-dotenv.config();
 
 // Inizializza Express
 const app = express();
@@ -34,6 +32,7 @@ mongoose.connect(process.env.MONGODB_URI)
 app.use('/api/auth', authRoutes);
 app.use('/api/products', productsRoutes);
 app.use('/api/orders', ordersRoutes);
+app.use('/api/test/email', testEmailRoutes);
 
 // Routes di test base
 app.get('/api/test', (req, res) => {

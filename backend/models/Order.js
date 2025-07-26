@@ -10,9 +10,8 @@ const orderSchema = new mongoose.Schema({
   
   // Numero ordine unico e leggibile
   orderNumber: {
-    type: String,
-    unique: true
-    // Rimuoviamo required: true perché lo generiamo nel pre-save
+    type: String
+    // Rimuoviamo unique: true perché lo gestiamo nel pre-save
   },
   
   // Lista dei prodotti ordinati

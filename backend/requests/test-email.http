@@ -1,0 +1,32 @@
+# Charlene's Kitchen - SendGrid Email Tests
+@baseUrl = http://localhost:5000
+
+### Test configurazione SendGrid
+POST {{baseUrl}}/api/test/email/connection
+
+### Test invio email semplice SendGrid
+POST {{baseUrl}}/api/test/email/send
+Content-Type: application/json
+
+{
+  "to": "morenodaqm@gmail.com",
+  "subject": "Test SendGrid da Charlene's Kitchen"
+}
+
+### Test email di benvenuto SendGrid
+POST {{baseUrl}}/api/test/email/welcome
+Content-Type: application/json
+
+{
+  "email": "morenodaqm@gmail.com",
+  "name": "Don Moreno"
+}
+
+### Test email conferma ordine SendGrid
+POST {{baseUrl}}/api/test/email/order
+Content-Type: application/json
+
+{
+  "email": "morenodaqm@gmail.com",
+  "name": "Mario Test"
+}
