@@ -1,0 +1,186 @@
+# Charlene's Kitchen - Products API Tests
+@baseUrl = http://localhost:5000
+@adminToken = YOUR_ADMIN_TOKEN_HERE
+@userToken = YOUR_USER_TOKEN_HERE
+
+### Get all products (public)
+GET {{baseUrl}}/api/products
+
+### Get products with filters
+GET {{baseUrl}}/api/products?category=primi&available=true&sort=price&order=asc
+
+### Search products
+GET {{baseUrl}}/api/products?search=pasta
+
+### Get products by dietary options
+GET {{baseUrl}}/api/products?dietaryOptions=vegetariano,vegano
+
+### Get products with pagination
+GET {{baseUrl}}/api/products?page=1&limit=5
+
+### Get all categories
+GET {{baseUrl}}/api/products/categories
+
+### Get featured products
+GET {{baseUrl}}/api/products/featured?limit=4
+
+### Get single product by ID
+GET {{baseUrl}}/api/products/6884c6b217cc51403c694036
+
+### Get non-existent product
+GET {{baseUrl}}/api/products/123456789012345678901234
+
+### ============= ADMIN ROUTES =============
+
+### Create new product (admin only)
+POST {{baseUrl}}/api/products
+Authorization: Bearer {{adminToken}}
+Content-Type: application/json
+
+{
+  "name": "Spaghetti alla Carbonara",
+  "description": "Spaghetti classici con guanciale, pecorino e uova. Una ricetta tradizionale romana preparata secondo la tradizione di famiglia.",
+  "price": 14.50,
+  "category": "primi",
+  "image": "https://res.cloudinary.com/charleneskitchen/image/upload/v1234567890/carbonara.jpg",
+  "cloudinaryId": "charleneskitchen/carbonara",
+  "ingredients": ["spaghetti", "guanciale", "pecorino romano", "uova", "pepe nero"],
+  "allergens": ["glutine", "uova", "latte"],
+  "dietaryOptions": [],
+  "nutrition": {
+    "calories": 580,
+    "protein": 25,
+    "carbs": 65,
+    "fat": 22
+  },
+  "preparationTime": 25,
+  "difficulty": "medio",
+  "servings": 1
+}
+
+### Create another product - Pizza Margherita
+POST {{baseUrl}}/api/products
+Authorization: Bearer {{adminToken}}
+Content-Type: application/json
+
+{
+  "name": "Pizza Margherita",
+  "description": "Pizza classica con pomodoro, mozzarella di bufala e basilico fresco. Cotta nel nostro forno a legna.",
+  "price": 12.00,
+  "category": "secondi",
+  "image": "https://res.cloudinary.com/charleneskitchen/image/upload/v1234567890/margherita.jpg",
+  "cloudinaryId": "charleneskitchen/margherita",
+  "ingredients": ["farina", "pomodoro", "mozzarella di bufala", "basilico", "olio evo"],
+  "allergens": ["glutine", "latte"],
+  "dietaryOptions": ["vegetariano"],
+  "nutrition": {
+    "calories": 650,
+    "protein": 30,
+    "carbs": 75,
+    "fat": 20
+  },
+  "preparationTime": 30,
+  "difficulty": "medio",
+  "servings": 1
+}
+
+### Create vegetarian product - Insalata Mista
+POST {{baseUrl}}/api/products
+Authorization: Bearer {{adminToken}}
+Content-Type: application/json
+
+{
+  "name": "Insalata Mista di Stagione",
+  "description": "Insalata fresca con verdure di stagione, pomodorini, olive e condimento a base di olio extravergine.",
+  "price": 8.50,
+  "category": "contorni",
+  "image": "https://res.cloudinary.com/charleneskitchen/image/upload/v1234567890/insalata.jpg",
+  "cloudinaryId": "charleneskitchen/insalata",
+  "ingredients": ["lattuga", "pomodorini", "carote", "olive", "olio evo", "aceto balsamico"],
+  "allergens": [],
+  "dietaryOptions": ["vegetariano", "vegano", "senza glutine"],
+  "nutrition": {
+    "calories": 150,
+    "protein": 3,
+    "carbs": 12,
+    "fat": 10
+  },
+  "preparationTime": 10,
+  "difficulty": "facile",
+  "servings": 1
+}
+
+### Create dessert - Tiramisù
+POST {{baseUrl}}/api/products
+Authorization: Bearer {{adminToken}}
+Content-Type: application/json
+
+{
+  "name": "Tiramisù della Casa",
+  "description": "Il nostro tiramisù fatto in casa con mascarpone, caffè espresso e cacao amaro. Preparato secondo ricetta tradizionale.",
+  "price": 6.50,
+  "category": "dolci",
+  "image": "https://res.cloudinary.com/charleneskitchen/image/upload/v1234567890/tiramisu.jpg",
+  "cloudinaryId": "charleneskitchen/tiramisu",
+  "ingredients": ["mascarpone", "savoiardi", "caffè", "uova", "zucchero", "cacao amaro"],
+  "allergens": ["glutine", "uova", "latte"],
+  "dietaryOptions": ["vegetariano"],
+  "nutrition": {
+    "calories": 320,
+    "protein": 8,
+    "carbs": 35,
+    "fat": 16
+  },
+  "preparationTime": 45,
+  "difficulty": "difficile",
+  "servings": 1
+}
+
+### Update product (admin only)
+PUT {{baseUrl}}/api/products/PRODUCT_ID_HERE
+Authorization: Bearer {{adminToken}}
+Content-Type: application/json
+
+{
+  "name": "Spaghetti alla Carbonara Deluxe",
+  "price": 16.00,
+  "description": "Versione premium con guanciale di Amatrice e pecorino stagionato 24 mesi."
+}
+
+### Change product availability (admin only)
+PATCH {{baseUrl}}/api/products/PRODUCT_ID_HERE/availability
+Authorization: Bearer {{adminToken}}
+Content-Type: application/json
+
+{
+  "available": false
+}
+
+### Archive product (soft delete - admin only)
+DELETE {{baseUrl}}/api/products/PRODUCT_ID_HERE
+Authorization: Bearer {{adminToken}}
+
+### Try to create product without admin token (should fail)
+POST {{baseUrl}}/api/products
+Authorization: Bearer {{userToken}}
+Content-Type: application/json
+
+{
+  "name": "Test Product",
+  "description": "This should fail",
+  "price": 10.00,
+  "category": "primi",
+  "image": "test.jpg"
+}
+
+### Try to create product without token (should fail)
+POST {{baseUrl}}/api/products
+Content-Type: application/json
+
+{
+  "name": "Test Product",
+  "description": "This should fail",
+  "price": 10.00,
+  "category": "primi",
+  "image": "test.jpg"
+}

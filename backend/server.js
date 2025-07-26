@@ -5,6 +5,7 @@ import dotenv from 'dotenv';
 
 // Import routes
 import authRoutes from './routes/auth.js';
+import productsRoutes from './routes/products.js';
 import { authenticate } from './middleware/auth.js';
 
 // Carica le variabili d'ambiente
@@ -30,6 +31,7 @@ mongoose.connect(process.env.MONGODB_URI)
 
 // Routes
 app.use('/api/auth', authRoutes);
+app.use('/api/products', productsRoutes);
 
 // Routes di test base
 app.get('/api/test', (req, res) => {
@@ -58,14 +60,14 @@ app.get('/api/protected', authenticate, (req, res) => {
 });
 
 // Gestione errori per route non trovate
-app.use((req, res) => {
+app.use(/.*/,(req, res) => {
   res.status(404).json({ 
     message: 'Route non trovata',
     path: req.originalUrl 
   });
 });
 
-// Gestione errori globale
+// Gestione errori globali
 app.use((error, req, res, next) => {
   console.error('❌ Server Error:', error);
   res.status(500).json({ 

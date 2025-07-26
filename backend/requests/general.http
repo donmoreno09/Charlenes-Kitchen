@@ -4,7 +4,7 @@
 @token = YOUR_TOKEN_HERE
 
 ### Test server status
-GET {{baseUrl}}/api/test
+GET {{baseUrl}}/api/tests
 
 ### Health check
 GET {{baseUrl}}/api/health
