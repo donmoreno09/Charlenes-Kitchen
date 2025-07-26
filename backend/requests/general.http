@@ -1,0 +1,16 @@
+# Charlene's Kitchen API Tests
+# Variabili globali per riutilizzo
+@baseUrl = http://localhost:5000
+@token = YOUR_TOKEN_HERE
+
+### Test server status
+GET {{baseUrl}}/api/test
+
+### Health check
+GET {{baseUrl}}/api/health
+
+### Test 404 route
+GET {{baseUrl}}/api/nonexistent
+
+### Test server error (when implemented)
+GET {{baseUrl}}/api/error-test

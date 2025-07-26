@@ -1,0 +1,91 @@
+### Test server connection
+GET http://localhost:5000/api/test
+
+### Check server health
+GET http://localhost:5000/api/health
+
+### Register new user
+POST http://localhost:5000/api/auth/register
+Content-Type: application/json
+
+{
+  "name": "Mario Rossi",
+  "email": "mario@charlenes-kitchen.com",
+  "password": "password123",
+  "phone": "3331234567",
+  "address": {
+    "street": "Via Roma 123",
+    "city": "Milano",
+    "zipCode": "20100"
+  }
+}
+
+### Register admin user
+POST http://localhost:5000/api/auth/register
+Content-Type: application/json
+
+{
+  "name": "Charlene Chef",
+  "email": "charlene@charlenes-kitchen.com",
+  "password": "admin123",
+  "role": "admin",
+  "phone": "3339876543"
+}
+
+### Login user
+POST http://localhost:5000/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "mario@charlenes-kitchen.com",
+  "password": "password123"
+}
+
+### Login admin
+POST http://localhost:5000/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "charlene@charlenes-kitchen.com",
+  "password": "admin123"
+}
+
+### Get current user profile (requires token)
+GET http://localhost:5000/api/auth/me
+Authorization: Bearer YOUR_TOKEN_HERE
+
+### Update user profile (requires token)
+PUT http://localhost:5000/api/auth/profile
+Authorization: Bearer YOUR_TOKEN_HERE
+Content-Type: application/json
+
+{
+  "name": "Mario Rossi Aggiornato",
+  "phone": "3331234999",
+  "address": {
+    "street": "Via Milano 456",
+    "city": "Roma",
+    "zipCode": "00100"
+  }
+}
+
+### Change password (requires token)
+POST http://localhost:5000/api/auth/change-password
+Authorization: Bearer YOUR_TOKEN_HERE
+Content-Type: application/json
+
+{
+  "currentPassword": "password123",
+  "newPassword": "newpassword456"
+}
+
+### Test protected route
+GET http://localhost:5000/api/protected
+Authorization: Bearer YOUR_TOKEN_HERE
+
+### Test with invalid token
+GET http://localhost:5000/api/protected
+Authorization: Bearer invalid_token_here
+
+### Test without token
+GET http://localhost:5000/api/protected
