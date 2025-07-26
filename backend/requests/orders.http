@@ -1,10 +1,10 @@
 # Charlene's Kitchen - Orders API Tests
 @baseUrl = http://localhost:5000
-@adminToken =  # Replace with actual admin token
-@userToken =  # Replace with actual user token
-@productId1 =  # Replace with actual product ID
-@productId2 =  # Replace with actual product ID
-@orderId =  # Replace with actual order ID
+@adminToken = YOUR_ADMIN_TOKEN
+@userToken = YOUR_USER_TOKEN
+@productId1 = PRODUCT_ID_1
+@productId2 = PRoDUCT_ID_2
+@orderId = ORDER_ID
 
 ### ============= CUSTOMER ROUTES =============
 
