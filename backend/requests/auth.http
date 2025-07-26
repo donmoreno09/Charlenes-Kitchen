@@ -26,7 +26,7 @@ Content-Type: application/json
 
 {
   "name": "Charlene Chef",
-  "email": "charlene@charlenes-kitchen.com",
+  "email": "admincharlene@charlenes-kitchen.com",
   "password": "admin123",
   "role": "admin",
   "phone": "3339876543"
@@ -46,7 +46,7 @@ POST http://localhost:5000/api/auth/login
 Content-Type: application/json
 
 {
-  "email": "charlene@charlenes-kitchen.com",
+  "email": "admincharlene@charlenes-kitchen.com",
   "password": "admin123"
 }
 

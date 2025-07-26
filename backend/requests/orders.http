@@ -1,0 +1,251 @@
+# Charlene's Kitchen - Orders API Tests
+@baseUrl = http://localhost:5000
+@adminToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2ODg0ZWJjY2E3ZjE4MTc2ZjU4MzUxZDMiLCJpYXQiOjE3NTM1NDMwMDgsImV4cCI6MTc1NDE0NzgwOH0.HIKAvb-0L2nUiBIEk96j018X-HpTbwP013_9cRkILn4
+@userToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2ODg0YzZiMjE3Y2M1MTQwM2M2OTQwMzYiLCJpYXQiOjE3NTM1NDIzOTEsImV4cCI6MTc1NDE0NzE5MX0.Ny9h_AFh6rKtRVADuZ68l6HM6gpgkTQZACpKJHWwLTs
+@productId1 = 6884ebf4a7f18176f58351d9
+@productId2 = 6884ec07a7f18176f58351dd
+@orderId = 6884f052fb08c1fd8f6f1b6f
+
+### ============= CUSTOMER ROUTES =============
+
+### Create new delivery order
+POST {{baseUrl}}/api/orders
+Authorization: Bearer {{userToken}}
+Content-Type: application/json
+
+{
+  "items": [
+    {
+      "productId": "{{productId1}}",
+      "quantity": 2,
+      "notes": "Poco sale per favore"
+    },
+    {
+      "productId": "{{productId2}}",
+      "quantity": 1,
+      "notes": "Extra mozzarella"
+    }
+  ],
+  "orderType": "delivery",
+  "deliveryInfo": {
+    "address": {
+      "street": "Via Roma 123",
+      "city": "Milano",
+      "zipCode": "20100"
+    },
+    "instructions": "Citofono: Rossi. Piano terra, porta verde."
+  },
+  "contactInfo": {
+    "phone": "3331234567",
+    "email": "mario@charlenes-kitchen.com"
+  },
+  "notes": "Consegna veloce se possibile, grazie!"
+}
+
+### Create pickup order
+POST {{baseUrl}}/api/orders
+Authorization: Bearer {{userToken}}
+Content-Type: application/json
+
+{
+  "items": [
+    {
+      "productId": "{{productId1}}",
+      "quantity": 1
+    }
+  ],
+  "orderType": "pickup",
+  "contactInfo": {
+    "phone": "3331234567",
+    "email": "mario@charlenes-kitchen.com"
+  },
+  "requestedTime": "2025-07-26T19:30:00.000Z",
+  "notes": "Ritirerò alle 19:30"
+}
+
+### Create order with invalid data (should fail)
+POST {{baseUrl}}/api/orders
+Authorization: Bearer {{userToken}}
+Content-Type: application/json
+
+{
+  "items": [],
+  "orderType": "delivery"
+}
+
+### Create order without auth (should fail)
+POST {{baseUrl}}/api/orders
+Content-Type: application/json
+
+{
+  "items": [
+    {
+      "productId": "{{productId1}}",
+      "quantity": 1
+    }
+  ],
+  "orderType": "pickup",
+  "contactInfo": {
+    "phone": "3331234567",
+    "email": "mario@charlenes-kitchen.com"
+  }
+}
+
+### Get user's orders
+GET {{baseUrl}}/api/orders
+Authorization: Bearer {{userToken}}
+
+### Get user's orders with filters
+GET {{baseUrl}}/api/orders?status=pending&page=1&limit=5
+Authorization: Bearer {{userToken}}
+
+### Get user's orders sorted by date
+GET {{baseUrl}}/api/orders?sortBy=createdAt&order=desc
+Authorization: Bearer {{userToken}}
+
+### Get single order details
+GET {{baseUrl}}/api/orders/{{orderId}}
+Authorization: Bearer {{userToken}}
+
+### Get non-existent order (should fail)
+GET {{baseUrl}}/api/orders/123456789012345678901234
+Authorization: Bearer {{userToken}}
+
+### Cancel pending order
+PATCH {{baseUrl}}/api/orders/{{orderId}}/cancel
+Authorization: Bearer {{userToken}}
+
+### ============= ADMIN ROUTES =============
+
+### Get all orders (admin dashboard)
+GET {{baseUrl}}/api/orders/admin/all
+Authorization: Bearer {{adminToken}}
+
+### Get orders with admin filters
+GET {{baseUrl}}/api/orders/admin/all?status=pending&orderType=delivery&page=1&limit=10
+Authorization: Bearer {{adminToken}}
+### Get today's orders
+GET {{baseUrl}}/api/orders/admin/all?date=2025-07-26
+Authorization: Bearer {{adminToken}}
+### Update order status to confirmed
+PATCH {{baseUrl}}/api/orders/{{orderId}}/status
+Authorization: Bearer {{adminToken}}
+Content-Type: application/json
+
+{
+  "status": "confirmed",
+  "note": "Ordine confermato - iniziamo preparazione"
+}
+
+### Update order status to preparing
+PATCH {{baseUrl}}/api/orders/{{orderId}}/status
+Authorization: Bearer {{adminToken}}
+Content-Type: application/json
+
+{
+  "status": "preparing",
+  "note": "Chef ha iniziato la preparazione"
+}
+
+### Update order status to ready
+PATCH {{baseUrl}}/api/orders/{{orderId}}/status
+Authorization: Bearer {{adminToken}}
+Content-Type: application/json
+
+{
+  "status": "ready",
+  "note": "Ordine pronto per il ritiro/consegna"
+}
+
+### Update order status to delivered
+PATCH {{baseUrl}}/api/orders/{{orderId}}/status
+Authorization: Bearer {{adminToken}}
+Content-Type: application/json
+
+{
+  "status": "delivered",
+  "note": "Ordine consegnato con successo"
+}
+
+### Update with invalid status (should fail)
+PATCH {{baseUrl}}/api/orders/{{orderId}}/status
+Authorization: Bearer {{adminToken}}
+Content-Type: application/json
+
+{
+  "status": "invalid_status"
+}
+
+### Get order statistics - week
+GET {{baseUrl}}/api/orders/admin/statistics?period=week
+Authorization: Bearer {{adminToken}}
+
+### Get order statistics - today
+GET {{baseUrl}}/api/orders/admin/statistics?period=today
+Authorization: Bearer {{adminToken}}
+
+### Get order statistics - month
+GET {{baseUrl}}/api/orders/admin/statistics?period=month
+Authorization: Bearer {{adminToken}}
+
+### Try admin route with user token (should fail)
+GET {{baseUrl}}/api/orders/admin/all
+Authorization: Bearer {{userToken}}
+
+### Try admin route without token (should fail)
+GET {{baseUrl}}/api/orders/admin/all
+
+### ============= ERROR CASES =============
+
+### Create order with non-existent product
+POST {{baseUrl}}/api/orders
+Authorization: Bearer {{userToken}}
+Content-Type: application/json
+
+{
+  "items": [
+    {
+      "productId": "123456789012345678901234",
+      "quantity": 1
+    }
+  ],
+  "orderType": "pickup",
+  "contactInfo": {
+    "phone": "3331234567",
+    "email": "mario@charlenes-kitchen.com"
+  }
+}
+
+### Create delivery order without address
+POST {{baseUrl}}/api/orders
+Authorization: Bearer {{userToken}}
+Content-Type: application/json
+
+{
+  "items": [
+    {
+      "productId": "{{productId1}}",
+      "quantity": 1
+    }
+  ],
+  "orderType": "delivery",
+  "contactInfo": {
+    "phone": "3331234567",
+    "email": "mario@charlenes-kitchen.com"
+  }
+}
+
+### Create order without contact info
+POST {{baseUrl}}/api/orders
+Authorization: Bearer {{userToken}}
+Content-Type: application/json
+
+{
+  "items": [
+    {
+      "productId": "{{productId1}}",
+      "quantity": 1
+    }
+  ],
+  "orderType": "pickup"
+}

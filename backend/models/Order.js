@@ -11,8 +11,8 @@ const orderSchema = new mongoose.Schema({
   // Numero ordine unico e leggibile
   orderNumber: {
     type: String,
-    unique: true,
-    required: true
+    unique: true
+    // Rimuoviamo required: true perché lo generiamo nel pre-save
   },
   
   // Lista dei prodotti ordinati
@@ -225,29 +225,41 @@ const orderSchema = new mongoose.Schema({
 
 // Pre-save middleware per generare il numero ordine
 orderSchema.pre('save', async function(next) {
-  if (this.isNew) {
-    // Genera un numero ordine unico (formato: CK-YYYYMMDD-XXXX)
-    const today = new Date();
-    const dateStr = today.getFullYear().toString() + 
-                   (today.getMonth() + 1).toString().padStart(2, '0') + 
-                   today.getDate().toString().padStart(2, '0');
-    
-    // Conta gli ordini di oggi per il numero progressivo
-    const todayCount = await this.constructor.countDocuments({
-      createdAt: {
-        $gte: new Date(today.setHours(0, 0, 0, 0)),
-        $lt: new Date(today.setHours(23, 59, 59, 999))
+  if (this.isNew && !this.orderNumber) {
+    try {
+      // Genera un numero ordine unico (formato: CK-YYYYMMDD-XXXX)
+      const today = new Date();
+      const dateStr = today.getFullYear().toString() + 
+                     (today.getMonth() + 1).toString().padStart(2, '0') + 
+                     today.getDate().toString().padStart(2, '0');
+      
+      // Conta gli ordini di oggi per il numero progressivo
+      const todayStart = new Date(today);
+      todayStart.setHours(0, 0, 0, 0);
+      const todayEnd = new Date(today);
+      todayEnd.setHours(23, 59, 59, 999);
+      
+      const todayCount = await this.constructor.countDocuments({
+        createdAt: {
+          $gte: todayStart,
+          $lt: todayEnd
+        }
+      });
+      
+      this.orderNumber = `CK-${dateStr}-${(todayCount + 1).toString().padStart(4, '0')}`;
+      
+      // Aggiungi il primo stato alla cronologia
+      if (this.statusHistory.length === 0) {
+        this.statusHistory.push({
+          status: this.status,
+          timestamp: new Date(),
+          note: 'Ordine creato'
+        });
       }
-    });
-    
-    this.orderNumber = `CK-${dateStr}-${(todayCount + 1).toString().padStart(4, '0')}`;
-    
-    // Aggiungi il primo stato alla cronologia
-    this.statusHistory.push({
-      status: this.status,
-      timestamp: new Date(),
-      note: 'Ordine creato'
-    });
+    } catch (error) {
+      console.error('Errore generazione orderNumber:', error);
+      return next(error);
+    }
   }
   
   next();
