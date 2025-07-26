@@ -52,11 +52,11 @@ Content-Type: application/json
 
 ### Get current user profile (requires token)
 GET http://localhost:5000/api/auth/me
-Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2ODg0YzZiMjE3Y2M1MTQwM2M2OTQwMzYiLCJpYXQiOjE3NTM1MzMxNzAsImV4cCI6MTc1NDEzNzk3MH0.T-Tr9rRz5z4fW49E2_LYYEZpqusK3agPGy6ltb38azk
+Authorization: BEARER_TOKEN
 
 ### Update user profile (requires token)
 PUT http://localhost:5000/api/auth/profile
-Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2ODg0YzZiMjE3Y2M1MTQwM2M2OTQwMzYiLCJpYXQiOjE3NTM1MzMxNzAsImV4cCI6MTc1NDEzNzk3MH0.T-Tr9rRz5z4fW49E2_LYYEZpqusK3agPGy6ltb38azk
+Authorization: BEARER_TOKEN
 Content-Type: application/json
 
 {
@@ -71,7 +71,7 @@ Content-Type: application/json
 
 ### Change password (requires token)
 POST http://localhost:5000/api/auth/change-password
-Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2ODg0YzZiMjE3Y2M1MTQwM2M2OTQwMzYiLCJpYXQiOjE3NTM1MzMxNzAsImV4cCI6MTc1NDEzNzk3MH0.T-Tr9rRz5z4fW49E2_LYYEZpqusK3agPGy6ltb38azk
+Authorization: BEARER_TOKEN
 Content-Type: application/json
 
 {
@@ -81,7 +81,7 @@ Content-Type: application/json
 
 ### Test protected route
 GET http://localhost:5000/api/protected
-Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2ODg0YzZiMjE3Y2M1MTQwM2M2OTQwMzYiLCJpYXQiOjE3NTM1MzMxNzAsImV4cCI6MTc1NDEzNzk3MH0.T-Tr9rRz5z4fW49E2_LYYEZpqusK3agPGy6ltb38azk
+Authorization: BEARER_TOKEN
 
 ### Test with invalid token
 GET http://localhost:5000/api/protected
