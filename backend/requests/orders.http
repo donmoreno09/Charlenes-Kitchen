@@ -1,10 +1,10 @@
 # Charlene's Kitchen - Orders API Tests
 @baseUrl = http://localhost:5000
-@adminToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2ODg0ZWJjY2E3ZjE4MTc2ZjU4MzUxZDMiLCJpYXQiOjE3NTM1NDMwMDgsImV4cCI6MTc1NDE0NzgwOH0.HIKAvb-0L2nUiBIEk96j018X-HpTbwP013_9cRkILn4
-@userToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2ODg0YzZiMjE3Y2M1MTQwM2M2OTQwMzYiLCJpYXQiOjE3NTM1NDIzOTEsImV4cCI6MTc1NDE0NzE5MX0.Ny9h_AFh6rKtRVADuZ68l6HM6gpgkTQZACpKJHWwLTs
-@productId1 = 6884ebf4a7f18176f58351d9
-@productId2 = 6884ec07a7f18176f58351dd
-@orderId = 6884f052fb08c1fd8f6f1b6f
+@adminToken =  # Replace with actual admin token
+@userToken =  # Replace with actual user token
+@productId1 =  # Replace with actual product ID
+@productId2 =  # Replace with actual product ID
+@orderId =  # Replace with actual order ID
 
 ### ============= CUSTOMER ROUTES =============
 
